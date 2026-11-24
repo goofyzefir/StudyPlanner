@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>ИИ-ассистент StudyBot</h2>
+<div id="chat-box" style="border: 1px solid #ccc; padding: 15px; height: 400px; overflow-y: scroll; background: #fff; border-radius: 8px; margin-bottom: 15px;">
+    <p style="color: #666;"><em>Задайте вопрос по учебе или попросите составить план подготовки.</em></p>
+</div>
+<div style="display: flex; gap: 10px;">
+    <input type="text" id="msg-input" placeholder="Ваш вопрос..." style="flex: 1; padding: 10px; border: 1px solid #ccc; border-radius: 4px;">
+    <button id="send-btn" class="btn" style="width: auto;">Отправить</button>
+</div>
+
+<script>
+document.getElementById('send-btn').addEventListener('click', async function() {
+    const input = document.getElementById('msg-input');
+    const text = input.value.trim();
+    if (!text) return;
+    
+    const chatBox = document.getElementById('chat-box');
+    chatBox.innerHTML += `<p style="text-align: right; color: blue;"><b>Вы:</b> ${text}</p>`;
+    input.value = '';
+    chatBox.innerHTML += `<p id="loading" style="color: gray;"><em>Бот думает...</em></p>`;
+    
+    try {
+        const response = await fetch('/agent/send', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({message: text})
+        });
+        const data = await response.json();
+        document.getElementById('loading').remove();
+        
+        if (response.ok) {
+            chatBox.innerHTML += `<p style="text-align: left; color: green;"><b>Бот:</b> ${data.reply}</p>`;
+        } else {
+            chatBox.innerHTML += `<p style="color: red;"><b>Ошибка:</b> ${data.message}</p>`;
+        }
+    } catch (e) {
+        document.getElementById('loading').remove();
+        chatBox.innerHTML += `<p style="color: red;"><b>Ошибка сети</b></p>`;
+    }
+    chatBox.scrollTop = chatBox.scrollHeight;
+});
+</script>
+{% endblock %}

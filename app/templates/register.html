@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Регистрация</h2>
+<form method="POST" id="reg-form">
+    {{ form.hidden_tag() }}
+    <p>{{ form.username.label }}<br>{{ form.username() }}</p>
+    <p>{{ form.email.label }}<br>{{ form.email() }}</p>
+    <p>{{ form.password.label }}<br>{{ form.password() }}</p>
+    <p>{{ form.confirm.label }}<br>{{ form.confirm() }}</p>
+    <button type="submit" class="btn">Зарегистрироваться</button>
+</form>
+<script>
+document.getElementById('reg-form').addEventListener('submit', function(e) {
+    const p1 = document.querySelector('#password').value;
+    const p2 = document.querySelector('#confirm').value;
+    if (p1 !== p2) {
+        e.preventDefault();
+        alert('Пароли не совпадают');
+    }
+});
+</script>
+{% endblock %}

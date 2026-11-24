@@ -7,6 +7,6 @@ load_dotenv(BASE_DIR / '.env')
 
 class Config:
     SECRET_KEY = os.getenv('SECRET_KEY', 'dev-key')
-    SQLALCHEMY_DATABASE_URI = 'sqlite:///' + str(BASE_DIR / 'app.db')
+    SQLALCHEMY_DATABASE_URI = os.getenv('DATABASE_URL', 'sqlite:///' + str(BASE_DIR / 'app.db'))
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     DEBUG = True

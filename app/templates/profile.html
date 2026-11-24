@@ -1,0 +1,7 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Профиль</h2>
+<p>Привет, {{ user.username }}!</p>
+<p>Ваша роль: {{ user.role }}</p>
+<a href="{{ url_for('main.logout') }}">Выйти</a>
+{% endblock %}
